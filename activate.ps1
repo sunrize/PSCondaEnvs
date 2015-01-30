@@ -1,11 +1,10 @@
 Param(
-    [string]$global:condaEnvName,
-    [switch]$updateRegistry
+    [string]$global:condaEnvName
 )
 
 # fix for pre-PS3
-if (-not $PSScriptRoot) { 
-    $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent 
+if (-not $PSScriptRoot) {
+    $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
 }
 
 # Get location of Anaconda installation
@@ -14,24 +13,11 @@ $anacondaInstallPath = (get-item $PSScriptRoot).parent.FullName
 # Build ENVS path
 $env:ANACONDA_ENVS = $anacondaInstallPath + '\envs'
 
-Function Set-Installpath {
-    # Updates Python installpath to be the Anaconda root location
-    Try {
-        write-host "Setting Python Installpath key to $env:ANACONDA_ENVS..."
-        Set-ItemProperty -Path hklm:\Software\python\pythoncore\2.7\installpath -Name "(default)" -Value "$env:ANACONDA_ENVS" -ErrorAction Stop
-    }
-    Catch {
-        write-warning "Unable to update Python path in registry.  Need to run as admin."
-    }
-}
-
 if (-not $condaEnvName) {
     write-host
-    write-host "Usage: activate envname [-UpdateRegistry]"
+    write-host "Usage: activate envname"
     write-host
     write-host "Deactivates previously activated Conda environment, then activates the chosen one."
-    write-host "Use -UpdateRegistry to set Python installpath to the activated virtualenv.  Useful"
-    write-host "for installing libraries."
     write-host
     write-host
     exit
@@ -42,7 +28,7 @@ if (-not (test-path $env:ANACONDA_ENVS\$condaEnvName\Python.exe)) {
     write-warning "No environment named `"$condaEnvName`" exists in $env:ANACONDA_ENVS."
     write-host
     write-host
-    exit 
+    exit
 }
 
 # Deactivate a previous activation if it is live
@@ -55,11 +41,6 @@ write-host
 write-host "Activating environment `"$env:CONDA_DEFAULT_ENV...`""
 $env:ANACONDA_BASE_PATH = $env:PATH
 $env:PATH="$env:ANACONDA_ENVS\$env:CONDA_DEFAULT_ENV\;$env:ANACONDA_ENVS\$env:CONDA_DEFAULT_ENV\Scripts\;$env:ANACONDA_BASE_PATH"
-
-if ($updateRegistry) {Set-Installpath}
-    
-write-host
-write-host
 
 function global:condaUserPrompt {''}
 $function:condaUserPrompt = $function:prompt
