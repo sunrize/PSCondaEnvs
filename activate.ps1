@@ -23,7 +23,7 @@ if (-not $condaEnvName) {
     exit
 }
 
-if (-not (test-path $env:ANACONDA_ENVS\$condaEnvName\Python.exe)) {
+if (-not (test-path $env:ANACONDA_ENVS\$condaEnvName\conda-meta)) {
     write-host
     write-warning "No environment named `"$condaEnvName`" exists in $env:ANACONDA_ENVS."
     write-host
