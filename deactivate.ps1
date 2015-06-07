@@ -19,7 +19,6 @@ if (-not (test-path env:\CONDA_DEFAULT_ENV)) {
     write-host
     write-host "Usage: deactivate"
     write-host "Deactivates previously activated Conda environment."
-    write-host "Use -UpdateRegistry to reset the Python installpath key."
     write-host
     write-host
     exit
