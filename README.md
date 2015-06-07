@@ -1,5 +1,3 @@
-Forked from Liquidmantis (https://github.com/Liquidmantis/PSCondaEnvs)
-
 PSCondaEnvs
 ===========
 
